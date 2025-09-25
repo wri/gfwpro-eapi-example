@@ -1,0 +1,20 @@
+{
+  "project": "gfw-pro-api-samples",
+  "language": "python",
+  "description": "Plain Python scripts demonstrating Global Forest Watch (GFW) Pro External API workflows.",
+  "entry_points": [
+    "flows/upload_and_list.py",
+    "flows/alerts_analysis.py",
+    "flows/ghg_analysis.py",
+    "flows/list_management.py",
+    "flows/poll_analysis.py",
+    "flows/api_keys.py"
+  ],
+  "instructions": [
+    "Set GFWPRO_BASE_URL and GFWPRO_API_TOKEN environment variables before running scripts.",
+    "Use sample_data/example.csv as the default upload dataset or replace with your own.",
+    "Scripts exit with non-zero status when the upstream API reports an error; handle accordingly.",
+    "See README.md for environment variable reference and troubleshooting tips."
+  ],
+  "dependencies_file": "requirements.txt"
+}
