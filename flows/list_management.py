@@ -34,7 +34,13 @@ def main():
   data = list_all()
   print('[bold]Lists:[/bold]')
   for item in data.get('lists', []):
-    print(item['listId'], item.get('listName'), item.get('status'))
+    summary = {
+      'listId': item.get('listId'),
+      'listName': item.get('listName'),
+      'status': item.get('status'),
+      'resultUrl': item.get('resultUrl')
+    }
+    print(summary)
 
   if data.get('lists'):
     first = data['lists'][0]['listId']

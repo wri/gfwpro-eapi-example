@@ -35,7 +35,7 @@ def create_list(upload_id: str) -> str:
 
 
 def trigger_alerts(list_id: str):
-  payload = {'options': {'startDate': START_DATE, 'endDate': END_DATE, 'userEmail': EMAIL}}
+  payload = {'startDate': START_DATE, 'endDate': END_DATE, 'userEmail': EMAIL}
   res = requests.post(f'{BASE}/list/{list_id}/analysis/Alerts/generate', json=payload, headers=HEADERS)
   res.raise_for_status()
 

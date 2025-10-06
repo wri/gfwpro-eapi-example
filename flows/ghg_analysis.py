@@ -35,7 +35,7 @@ def create_list(upload_id: str) -> str:
 
 
 def trigger_ghg(list_id: str):
-  payload = {'options': {'yield': YIELD, 'baselineYear': 2020, 'userEmail': EMAIL}}
+  payload = {'yield': YIELD, 'baselineYear': 2020, 'userEmail': EMAIL}
   res = requests.post(f'{BASE}/list/{list_id}/analysis/GHG/analyze', json=payload, headers=HEADERS)
   res.raise_for_status()
 

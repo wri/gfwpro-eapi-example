@@ -17,8 +17,9 @@ def poll_status(list_id: str, analysis_id: str):
     res = requests.get(f'{BASE}/list/{list_id}/analysis/{analysis_id}/status', headers=HEADERS)
     res.raise_for_status()
     data = res.json()
-    print('Status:', data['status'])
-    if data['status'] in {'COMPLETE', 'FAILED'}:
+    status_value = str(data.get('status', '')).lower()
+    print('Status:', data.get('status'))
+    if status_value in {'complete', 'completed', 'failed', 'error'}:
       return data
     time.sleep(int(os.environ.get('POLL_INTERVAL', '10')))
 
@@ -30,9 +31,13 @@ def main():
     raise RuntimeError('Set LIST_ID environment variable')
 
   result = poll_status(LIST_ID, ANALYSIS_ID)
-  if result['status'] == 'COMPLETE':
+  status_value = str(result.get('status', '')).lower()
+  if status_value in {'complete', 'completed'}:
     print('[green]Analysis complete[/green]')
-    res = requests.get(f'{BASE}/list/{LIST_ID}/download', headers=HEADERS)
+    result_url = result.get('resultUrl')
+    if not result_url:
+      raise RuntimeError('Analysis completed but no resultUrl returned. Re-run generate endpoint.')
+    res = requests.get(result_url)
     res.raise_for_status()
     filename = f'{LIST_ID}_{ANALYSIS_ID}.zip'
     with open(filename, 'wb') as fh:

@@ -7,8 +7,7 @@
     "flows/alerts_analysis.py",
     "flows/ghg_analysis.py",
     "flows/list_management.py",
-    "flows/poll_analysis.py",
-    "flows/api_keys.py"
+    "flows/poll_analysis.py"
   ],
   "instructions": [
     "Set GFWPRO_BASE_URL and GFWPRO_API_TOKEN environment variables before running scripts.",

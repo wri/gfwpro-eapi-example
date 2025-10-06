@@ -43,14 +43,15 @@ def poll_status(list_id: str):
     res = requests.get(f'{BASE}/list/{list_id}/analysis/{ANALYSIS}/status', headers=HEADERS)
     res.raise_for_status()
     data = res.json()
-    print('Status:', data['status'])
-    if data['status'] in {'COMPLETE', 'FAILED', 'ERROR', 'Error'}:
+    status_value = str(data.get('status', '')).lower()
+    print('Status:', data.get('status'))
+    if status_value in {'complete', 'completed', 'failed', 'error'}:
       return data
     time.sleep(10)
 
 
-def download_results(list_id: str, analysis_id: str):
-  res = requests.get(f'{BASE}/list/{list_id}/download', headers=HEADERS)
+def download_results(list_id: str, analysis_id: str, result_url: str):
+  res = requests.get(result_url)
   res.raise_for_status()
   filename = f'{list_id}_{analysis_id}.zip'
   with open(filename, 'wb') as fh:
@@ -74,8 +75,13 @@ def main():
 
   print('[bold]4. Poll analysis status[/bold]')
   status = poll_status(list_id)
-  if status['status'].upper() == 'COMPLETE':
-    download_results(list_id, ANALYSIS)
+  status_value = str(status.get('status', '')).lower()
+  if status_value in {'complete', 'completed'}:
+    result_url = status.get('resultUrl')
+    if not result_url:
+      print('[red]Analysis completed but resultUrl not provided. Use generate endpoint to refresh downloads.[/red]')
+      sys.exit(1)
+    download_results(list_id, ANALYSIS, result_url)
   else:
     print('[red]Analysis did not complete successfully[/red]', status)
     sys.exit(1)
