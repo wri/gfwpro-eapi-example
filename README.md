@@ -1,6 +1,6 @@
 # GFW Pro External API – Plain Python Reference
 
-This repository contains lightweight Python scripts that interact directly with the Global Forest Watch (GFW) Pro External API. Each script focuses on a specific workflow so partners can explore, test, and extend the API without any framework overhead. For the latest product documentation (including background, sample curl commands, release notes, and attribution requirements) visit the [GFW Pro API Confluence space](https://globalforestwatch.atlassian.net/wiki/spaces/GFWPRO/pages/123456789/GFW+Pro+API+Documentation).
+This repository contains lightweight Python scripts that interact directly with the Global Forest Watch (GFW) Pro External API. Each script focuses on a specific workflow so partners can explore, test, and extend the API without any framework overhead. For the latest product documentation (including background, sample curl commands, release notes, and attribution requirements) visit the [GFW Pro API Confluence space](https://gfw.atlassian.net/wiki/external/MzYyYmY2ZmI1ZTY4NGEzOGJkYTMzZjQzOTQ3MjlkNDU).
 
 ## Endpoint Reference
 
