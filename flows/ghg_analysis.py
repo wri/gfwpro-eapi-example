@@ -5,7 +5,7 @@ import time
 import requests
 from rich import print
 
-BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro-qa.globalforestwatch.org/api/v1').rstrip('/')
+BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro.globalforestwatch.org/api/v1').rstrip('/')
 TOKEN = os.environ.get('GFWPRO_API_TOKEN')
 EMAIL = os.environ.get('USER_EMAIL', 'demo@example.com')
 CSV_PATH = os.environ.get('CSV_PATH', 'sample_data/example.csv')
