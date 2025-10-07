@@ -4,7 +4,7 @@ import os
 import requests
 from rich import print
 
-BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro-qa.globalforestwatch.org/api/v1').rstrip('/')
+BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro.globalforestwatch.org/api/v1').rstrip('/')
 TOKEN = os.environ.get('GFWPRO_API_TOKEN')
 HEADERS = {'x-api-key': TOKEN}
 

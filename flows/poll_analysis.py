@@ -5,7 +5,7 @@ import time
 import requests
 from rich import print
 
-BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro-qa.globalforestwatch.org/api/v1').rstrip('/')
+BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro.globalforestwatch.org/api/v1').rstrip('/')
 TOKEN = os.environ.get('GFWPRO_API_TOKEN')
 LIST_ID = os.environ.get('LIST_ID')
 ANALYSIS_ID = os.environ.get('ANALYSIS_ID', 'FCD')
