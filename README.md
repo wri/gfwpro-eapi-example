@@ -4,7 +4,7 @@ This repository contains lightweight Python scripts that interact directly with 
 
 ## Endpoint Reference
 
-All endpoints are rooted at `GFWPRO_BASE_URL` (default `https://pro-qa.globalforestwatch.org/api/v1`).
+All endpoints are rooted at `GFWPRO_BASE_URL` (default `https://pro.globalforestwatch.org/api/v1`).
 
 | Method & Path | Description |
 | --- | --- |
@@ -49,7 +49,7 @@ python flows/upload_and_list.py
 
 | Variable | Purpose | Default |
 | --- | --- | --- |
-| `GFWPRO_BASE_URL` | API base URL | `https://pro-qa.globalforestwatch.org/api/v1` |
+| `GFWPRO_BASE_URL` | API base URL | `https://pro.globalforestwatch.org/api/v1` |
 | `GFWPRO_API_TOKEN` | API key sent as `x-api-key` | *(required)* |
 | `USER_EMAIL` | Contact email used in upload / delete requests | `demo@example.com` |
 | `CSV_PATH` | Path to upload file | `sample_data/example.csv` |
