@@ -3,6 +3,7 @@
 import os
 import requests
 from rich import print
+from .http_utils import post_with_redirect
 
 BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro.globalforestwatch.org/api/v1').rstrip('/')
 TOKEN = os.environ.get('GFWPRO_API_TOKEN')
@@ -22,7 +23,11 @@ def get_list(list_id: str):
 
 
 def delete_list(list_id: str, user_email: str):
-  res = requests.post(f'{BASE}/list/{list_id}/delete', json={'userEmail': user_email}, headers=HEADERS)
+  res = post_with_redirect(
+    f'{BASE}/list/{list_id}/delete',
+    json={'userEmail': user_email},
+    headers=HEADERS,
+  )
   res.raise_for_status()
   return res.json()
 

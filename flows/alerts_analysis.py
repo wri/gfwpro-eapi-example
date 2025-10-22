@@ -4,6 +4,8 @@ import os
 import time
 import requests
 from rich import print
+from .http_utils import post_with_redirect
+
 
 BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro.globalforestwatch.org/api/v1').rstrip('/')
 TOKEN = os.environ.get('GFWPRO_API_TOKEN')
@@ -15,7 +17,11 @@ HEADERS = {'x-api-key': TOKEN}
 
 
 def prepare_upload() -> dict:
-  res = requests.post(f'{BASE}/prepare_upload', json={'userEmail': EMAIL, 'fileType': 'csv'}, headers=HEADERS)
+  res = post_with_redirect(
+    f'{BASE}/prepare_upload',
+    json={'userEmail': EMAIL, 'fileType': 'csv'},
+    headers=HEADERS,
+  )
   res.raise_for_status()
   return res.json()
 
@@ -29,14 +35,22 @@ def upload_file(upload_info: dict):
 
 def create_list(upload_id: str) -> str:
   body = {'uploadId': upload_id, 'listName': f'alerts_demo_{int(time.time())}', 'commodity': 'Cocoa Generic', 'analysisIDs': 'Alerts'}
-  res = requests.post(f'{BASE}/list/upload_new', json=body, headers=HEADERS)
+  res = post_with_redirect(
+    f'{BASE}/list/upload_new',
+    json=body,
+    headers=HEADERS,
+  )
   res.raise_for_status()
   return res.json()['listId']
 
 
 def trigger_alerts(list_id: str):
   payload = {'startDate': START_DATE, 'endDate': END_DATE, 'userEmail': EMAIL}
-  res = requests.post(f'{BASE}/list/{list_id}/analysis/Alerts/generate', json=payload, headers=HEADERS)
+  res = post_with_redirect(
+    f'{BASE}/list/{list_id}/analysis/Alerts/generate',
+    json=payload,
+    headers=HEADERS,
+  )
   res.raise_for_status()
 
 

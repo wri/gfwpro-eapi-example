@@ -6,6 +6,11 @@ import time
 import requests
 from rich import print
 
+try:
+  from .http_utils import post_with_redirect
+except ImportError:  # pragma: no cover
+  from http_utils import post_with_redirect
+
 BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro.globalforestwatch.org/api/v1')
 if BASE.startswith('//'):
   BASE = f'http:{BASE}'
@@ -17,15 +22,13 @@ COMMODITY = os.environ.get('COMMODITY', 'Cocoa Generic')
 ANALYSIS = os.environ.get('ANALYSIS', 'FCD')
 HEADERS = {'x-api-key': TOKEN, 'Accept': 'application/json'}
 
-def postWithRedirect(api_url, headers, data):
-    response = requests.post(api_url, headers=headers, data=data, allow_redirects=False)
-    if response.status_code in (301, 302):
-        new_url = response.headers.get("Location")
-    response = requests.post(new_url, headers=headers, data=data, allow_redirects=False)
-    return response
 
 def prepare_upload() -> dict:
-  res = postWithRedirect(f'{BASE}/prepare_upload', data={'userEmail': EMAIL, 'fileType': 'csv'}, headers=HEADERS)
+  res = post_with_redirect(
+    f'{BASE}/prepare_upload',
+    data={'userEmail': EMAIL, 'fileType': 'csv'},
+    headers=HEADERS,
+  )
   res.raise_for_status()
   return res.json()
 
@@ -39,7 +42,11 @@ def upload_file(upload_info: dict):
 
 def create_list(upload_id: str) -> str:
   body = {'uploadId': upload_id, 'listName': f'client_demo_{int(time.time())}', 'commodity': COMMODITY, 'analysisIDs': ANALYSIS}
-  res = postWithRedirect(f'{BASE}/list/upload_new', data=body, headers=HEADERS)
+  res = post_with_redirect(
+    f'{BASE}/list/upload_new',
+    data=body,
+    headers=HEADERS,
+  )
   res.raise_for_status()
   return res.json()['listId']
 
