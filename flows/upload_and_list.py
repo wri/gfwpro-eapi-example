@@ -26,7 +26,7 @@ HEADERS = {'x-api-key': TOKEN, 'Accept': 'application/json'}
 def prepare_upload() -> dict:
   res = post_with_redirect(
     f'{BASE}/prepare_upload',
-    data={'userEmail': EMAIL, 'fileType': 'csv'},
+    json={'userEmail': EMAIL, 'fileType': 'csv'},
     headers=HEADERS,
   )
   res.raise_for_status()
@@ -44,22 +44,35 @@ def create_list(upload_id: str) -> str:
   body = {'uploadId': upload_id, 'listName': f'client_demo_{int(time.time())}', 'commodity': COMMODITY, 'analysisIDs': ANALYSIS}
   res = post_with_redirect(
     f'{BASE}/list/upload_new',
-    data=body,
+    json=body,
     headers=HEADERS,
   )
   res.raise_for_status()
   return res.json()['listId']
 
 
-def poll_status(list_id: str):
-  while True:
+def poll_status(list_id: str, max_attempts: int = 60):
+  """Poll analysis status until completion or timeout."""
+  attempts = 0
+  while attempts < max_attempts:
     res = requests.get(f'{BASE}/list/{list_id}/analysis/{ANALYSIS}/status', headers=HEADERS)
     res.raise_for_status()
     data = res.json()
     status_value = str(data.get('status', '')).lower()
     print('Status:', data.get('status'))
-    if status_value in {'complete', 'completed', 'failed', 'error'}:
+    
+    # Check for completion states
+    if status_value in {'complete', 'completed'}:
       return data
+    elif status_value in {'failed', 'error', 'expired'}:
+      print(f'[red]Analysis failed with status: {data.get("status")}[/red]')
+      return data
+    
+    attempts += 1
+    if attempts >= max_attempts:
+      print(f'[yellow]Timeout reached after {max_attempts} attempts. Analysis may still be running.[/yellow]')
+      return data
+    
     time.sleep(10)
 
 
@@ -95,9 +108,13 @@ def main():
       print('[red]Analysis completed but resultUrl not provided. Use generate endpoint to refresh downloads.[/red]')
       sys.exit(1)
     download_results(list_id, ANALYSIS, result_url)
-  else:
-    print('[red]Analysis did not complete successfully[/red]', status)
+  elif status_value in {'failed', 'error', 'expired'}:
+    print('[red]Analysis failed[/red]', status)
     sys.exit(1)
+  else:
+    print('[yellow]Analysis is still running or timed out. You can check status later using:[/yellow]')
+    print(f'LIST_ID={list_id} ANALYSIS_ID={ANALYSIS} python flows/poll_analysis.py')
+    sys.exit(0)
 
 
 if __name__ == '__main__':

@@ -4,7 +4,11 @@ import os
 import time
 import requests
 from rich import print
-from .http_utils import post_with_redirect
+
+try:
+  from .http_utils import post_with_redirect
+except ImportError:  # pragma: no cover
+  from http_utils import post_with_redirect
 
 BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro.globalforestwatch.org/api/v1').rstrip('/')
 TOKEN = os.environ.get('GFWPRO_API_TOKEN')
