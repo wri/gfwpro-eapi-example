@@ -31,6 +31,7 @@ def poll_status_with_progress(list_id: str, analysis_id: str, max_attempts: int 
         
         while attempts < max_attempts:
             try:
+                time.sleep(60)
                 res = requests.get(f'{BASE}/list/{list_id}/analysis/{analysis_id}/status', headers=HEADERS)
                 res.raise_for_status()
                 data = res.json()
@@ -42,7 +43,7 @@ def poll_status_with_progress(list_id: str, analysis_id: str, max_attempts: int 
                 
                 # Only print status changes
                 if current_status != last_status:
-                    print(f"[bold blue]Status changed: {current_status}[/bold blue]")
+                    print(f"\n[bold blue]Status changed: {current_status}[/bold blue]")
                     last_status = current_status
                 
                 # Check for completion states
@@ -60,7 +61,6 @@ def poll_status_with_progress(list_id: str, analysis_id: str, max_attempts: int 
                     print(f"[cyan]LIST_ID={list_id} ANALYSIS_ID={analysis_id} python flows/poll_analysis.py[/cyan]")
                     return data
                 
-                time.sleep(10)
                 
             except KeyboardInterrupt:
                 print(f"\n[yellow]⏹️  Polling interrupted by user[/yellow]")

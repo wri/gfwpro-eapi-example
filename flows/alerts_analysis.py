@@ -6,10 +6,8 @@ import time
 import requests
 from rich import print
 
-try:
-  from .http_utils import post_with_redirect
-except ImportError:  # pragma: no cover
-  from http_utils import post_with_redirect
+from http_utils import post_with_redirect
+from poll_analysis import poll_status_with_progress
 
 BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro.globalforestwatch.org/api/v1').rstrip('/')
 TOKEN = os.environ.get('GFWPRO_API_TOKEN')
@@ -79,7 +77,10 @@ def main():
   print('[bold]3. Create list[/bold]')
   list_id = create_list(info['uploadId'])
   print('List ID:', list_id)
-  
+
+  poll_result = poll_status_with_progress(list_id, 'Alerts')
+  print('Poll result for List ID:', list_id, 'is', poll_result)
+
   print('[bold]4. Trigger alerts generation[/bold]')
   success = trigger_alerts(list_id)
   
