@@ -5,10 +5,8 @@ import time
 import requests
 from rich import print
 
-try:
-  from .http_utils import post_with_redirect
-except ImportError:  # pragma: no cover
-  from http_utils import post_with_redirect
+from http_utils import post_with_redirect
+from poll_analysis import poll_status_with_progress
 
 BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro.globalforestwatch.org/api/v1').rstrip('/')
 TOKEN = os.environ.get('GFWPRO_API_TOKEN')
@@ -47,16 +45,6 @@ def create_list(upload_id: str) -> str:
   return res.json()['listId']
 
 
-def trigger_ghg(list_id: str):
-  payload = {'yield': YIELD, 'baselineYear': 2020, 'userEmail': EMAIL}
-  res = post_with_redirect(
-    f'{BASE}/list/{list_id}/analysis/GHG/analyze',
-    json=payload,
-    headers=HEADERS,
-  )
-  res.raise_for_status()
-
-
 def main():
   if not TOKEN:
     raise RuntimeError('Set GFWPRO_API_TOKEN environment variable.')
@@ -65,8 +53,8 @@ def main():
   upload_file(info)
   list_id = create_list(info['uploadId'])
   print('List ID:', list_id)
-  trigger_ghg(list_id)
-  print('Triggered GHG analysis. Poll /list/{list_id}/analysis/GHG/status')
+  poll_result = poll_status_with_progress(list_id, 'GHG')
+  print('Poll result for List ID:', list_id, 'is', poll_result)
 
 
 if __name__ == '__main__':

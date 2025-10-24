@@ -6,10 +6,8 @@ import time
 import requests
 from rich import print
 
-try:
-  from .http_utils import post_with_redirect
-except ImportError:  # pragma: no cover
-  from http_utils import post_with_redirect
+from http_utils import post_with_redirect
+from poll_analysis import poll_status_with_progress
 
 BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro.globalforestwatch.org/api/v1')
 if BASE.startswith('//'):
@@ -50,32 +48,6 @@ def create_list(upload_id: str) -> str:
   res.raise_for_status()
   return res.json()['listId']
 
-
-def poll_status(list_id: str, max_attempts: int = 60):
-  """Poll analysis status until completion or timeout."""
-  attempts = 0
-  while attempts < max_attempts:
-    res = requests.get(f'{BASE}/list/{list_id}/analysis/{ANALYSIS}/status', headers=HEADERS)
-    res.raise_for_status()
-    data = res.json()
-    status_value = str(data.get('status', '')).lower()
-    print('Status:', data.get('status'))
-    
-    # Check for completion states
-    if status_value in {'complete', 'completed'}:
-      return data
-    elif status_value in {'failed', 'error', 'expired'}:
-      print(f'[red]Analysis failed with status: {data.get("status")}[/red]')
-      return data
-    
-    attempts += 1
-    if attempts >= max_attempts:
-      print(f'[yellow]Timeout reached after {max_attempts} attempts. Analysis may still be running.[/yellow]')
-      return data
-    
-    time.sleep(10)
-
-
 def download_results(list_id: str, analysis_id: str, result_url: str):
   res = requests.get(result_url)
   res.raise_for_status()
@@ -100,7 +72,9 @@ def main():
   print('List ID:', list_id)
 
   print('[bold]4. Poll analysis status[/bold]')
-  status = poll_status(list_id)
+  status = poll_status_with_progress(list_id, ANALYSIS)
+  print('Poll result for List ID:', list_id, 'is', status)
+
   status_value = str(status.get('status', '')).lower()
   if status_value in {'complete', 'completed'}:
     result_url = status.get('resultUrl')
