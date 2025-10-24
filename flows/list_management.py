@@ -3,7 +3,11 @@
 import os
 import requests
 from rich import print
-from .http_utils import post_with_redirect
+
+try:
+  from .http_utils import post_with_redirect
+except ImportError:  # pragma: no cover
+  from http_utils import post_with_redirect
 
 BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro.globalforestwatch.org/api/v1').rstrip('/')
 TOKEN = os.environ.get('GFWPRO_API_TOKEN')
@@ -38,7 +42,11 @@ def main():
 
   data = list_all()
   print('[bold]Lists:[/bold]')
-  for item in data.get('lists', []):
+  
+  # Handle both array response and object with lists property
+  lists = data if isinstance(data, list) else data.get('lists', [])
+  
+  for item in lists:
     summary = {
       'listId': item.get('listId'),
       'listName': item.get('listName'),
@@ -47,8 +55,8 @@ def main():
     }
     print(summary)
 
-  if data.get('lists'):
-    first = data['lists'][0]['listId']
+  if lists:
+    first = lists[0]['listId']
     print('\n[bold]Details for[/bold]', first)
     print(get_list(first))
 

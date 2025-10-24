@@ -33,15 +33,24 @@ The `sample_data/example.csv` file contains ready-to-use coordinates featuring t
 
 ## Quick Start
 
+**Important**: This code requires Python 3.7+ and a virtual environment.
+
 ```bash
-python -m venv .venv
-source .venv/bin/activate
+# 1. Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# 2. Install dependencies
 pip install -r requirements.txt
-```
 
-Set the environment variables required for your workflow (see table below), then run the desired script, e.g.
+# 3. Set required environment variables
+export GFWPRO_API_TOKEN='your-api-token-here'
+export USER_EMAIL='your-email@example.com'
 
-```bash
+# 4. Test your setup
+python test_setup.py
+
+# 5. Run example scripts
 python flows/upload_and_list.py
 ```
 
@@ -55,7 +64,7 @@ python flows/upload_and_list.py
 | `CSV_PATH` | Path to upload file | `sample_data/example.csv` |
 | `COMMODITY` | Commodity name (free form, required by API) | `Cocoa Generic` |
 | `ANALYSIS` | Analysis ID (`FCD`, `Alerts`, `DefReport`, `GHG`) | `FCD` |
-| `ALERT_START_DATE`, `ALERT_END_DATE` | Alerts date range | `2024-01-01`, `2024-12-31` |
+| `ALERT_START_DATE`, `ALERT_END_DATE` | Alerts date range (MM-DD-YYYY format) | `01-01-2024`, `12-31-2024` |
 | `GHG_YIELD` | Yield for GHG analysis (kg/ha) | `0.5` |
 | `LIST_ID`, `ANALYSIS_ID` | Used by `poll_analysis.py` | *(none)* |
 | `DELETE_LIST` | Set to `1` to delete the first list in `list_management.py` | `0` |
@@ -80,10 +89,31 @@ Update or replace the file to test your own lists.
 
 ## Troubleshooting & Tips
 
+### Common Issues
+
+- **ModuleNotFoundError: No module named 'requests'** – You need to activate the virtual environment and install dependencies:
+  ```bash
+  source .venv/bin/activate
+  pip install -r requirements.txt
+  ```
+
+- **RuntimeError: Set GFWPRO_API_TOKEN environment variable** – You must set the required environment variables:
+  ```bash
+  export GFWPRO_API_TOKEN='your-api-token-here'
+  export USER_EMAIL='your-email@example.com'
+  ```
+
 - **401 Unauthorized** – ensure `GFWPRO_API_TOKEN` matches the environment (QA, staging, prod) and is passed as `x-api-key`.
 - **4xx validation errors** – confirm required body fields such as `analysisIDs` (CSV string) and commodity spelling (per API release notes). Refer to the Confluence documentation for schema changes.
 - **Analysis status `Error`** – indicates the upstream service encountered an issue (invalid geometry, data limits, etc.). Collect the `listId` and consult service logs or retry with a reduced dataset.
 - **Protocol-relative URLs** (e.g., `//localhost:3335/...`) are normal in some environments; scripts normalize them to `http://` automatically.
+
+### Testing Your Setup
+
+Run the test script to verify everything is configured correctly:
+```bash
+python test_setup.py
+```
 
 ## Security Guidance
 
