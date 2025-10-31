@@ -31,6 +31,35 @@ All endpoints are rooted at `GFWPRO_BASE_URL` (default `https://pro.globalforest
 
 The `sample_data/example.csv` file contains ready-to-use coordinates featuring the expected column headers.
 
+## Postman Collection
+
+A complete Postman collection is available in the `postman/` directory for testing the API without writing code. The collection includes all endpoints organized into workflows matching the Python scripts.
+
+### Quick Setup
+
+1. **Import Collection**: Open Postman → Import → Select `postman/GFW_Pro_EAPI.postman_collection.json`
+2. **Import Environment**: Environments → Import → Select `postman/GFW_Pro_EAPI.postman_environment.json`
+3. **Activate Environment**: Select "GFW Pro EAPI Environment" from the dropdown (top right)
+4. **Update Variables**: Edit environment variables with your `apiToken`, `baseUrl`, and `userEmail`
+
+### Collection Structure
+
+The collection is organized into 5 workflows:
+- **Upload and List Flow** - Complete workflow: prepare → upload → create list → poll → download
+- **Alerts Analysis Flow** - Alerts report generation workflow
+- **GHG Analysis Flow** - GHG analysis workflow
+- **List Management** - List operations (list all, get details, delete)
+- **Poll Analysis** - Standalone polling and download operations
+
+### Features
+
+- **Automatic Variable Management**: Scripts automatically extract `uploadId`, `uploadUrl`, `listId`, and `resultUrl` from responses
+- **Ready-to-Use**: Pre-configured with all endpoints and request formats
+- **Workflow Organization**: Requests grouped by workflow for easy execution
+- **Environment Variables**: All configuration stored in environment for easy switching
+
+See [`postman/README.md`](postman/README.md) for detailed import instructions and usage guide.
+
 ## Quick Start
 
 **Important**: This code requires Python 3.7+ and a virtual environment.
