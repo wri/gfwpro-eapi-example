@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "gfwpro-eapi-collection",
 		"name": "GFW Pro EAPI Collection",
-		"description": "Complete API collection for GFW Pro endpoints organized into workflows",
+		"description": "Complete API collection for GFW Pro endpoints organized into workflows\n\n## ⚠️ IMPORTANT: Postman Configuration Required\n\nBefore making your first API request, you **must** configure two Postman settings:\n\n### 1. Enable Automatic Redirects\n1. Click the **gear icon (⚙️ Settings)** in the top-right corner of Postman\n2. Go to the **General** tab\n3. Find **\"Automatically follow redirects\"**\n4. Turn it **ON** ✅\n5. This approximates curl's `--location` and `--post302` behavior, which is required for some API endpoints\n\n### 2. Set HTTP Version to Auto\n1. In the same **Settings → General** page\n2. Look for **\"HTTP version\"**\n3. Set it to **\"Auto\"**\n4. This lets Postman negotiate the same HTTP version that the server uses, avoiding version-mismatch issues\n\n**Close the Settings window** (changes are saved automatically).\n\n⚠️ **If you skip this step, you may encounter errors when making API requests.** These settings ensure Postman behaves like command-line tools (curl) that our API expects.\n\n---\n\n## Quick Start\n\n1. Import this collection and the environment file\n2. Configure Postman settings (see above)\n3. Update environment variables with your API credentials\n4. Start with the \"1. Upload and List Flow\" folder",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -13,6 +13,28 @@
 				{
 					"name": "Prepare Upload",
 					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// ⚠️ IMPORTANT: Postman Configuration Check",
+									"// This API requires specific Postman settings to work correctly.",
+									"// Please verify these settings before making requests:",
+									"//",
+									"// 1. Enable Automatic Redirects:",
+									"//    Settings (⚙️) → General → \"Automatically follow redirects\" → ON",
+									"//",
+									"// 2. Set HTTP Version to Auto:",
+									"//    Settings (⚙️) → General → \"HTTP version\" → Auto",
+									"//",
+									"console.warn(\"⚠️ IMPORTANT: Ensure Postman settings are configured:\");",
+									"console.warn(\"   1. Settings → General → 'Automatically follow redirects' → ON\");",
+									"console.warn(\"   2. Settings → General → 'HTTP version' → Auto\");",
+									"console.warn(\"   If requests fail, check these settings first!\");"
+								],
+								"type": "text/javascript"
+							}
+						},
 						{
 							"listen": "test",
 							"script": {
@@ -59,7 +81,7 @@
 							"host": ["{{baseUrl}}"],
 							"path": ["prepare_upload"]
 						},
-						"description": "Step 1: Prepare upload to get signed URL and uploadId"
+						"description": "Step 1: Prepare upload to get signed URL and uploadId\n\n⚠️ **Before sending this request, ensure Postman settings are configured:**\n1. Settings (⚙️) → General → \"Automatically follow redirects\" → **ON**\n2. Settings (⚙️) → General → \"HTTP version\" → **Auto**\n\nCheck the Postman Console (View → Show Postman Console) for warnings if requests fail."
 					},
 					"response": []
 				},
