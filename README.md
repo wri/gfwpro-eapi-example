@@ -31,6 +31,12 @@ All endpoints are rooted at `GFWPRO_BASE_URL` (default `https://pro.globalforest
 
 The `sample_data/example.csv` file contains ready-to-use coordinates featuring the expected column headers.
 
+## QuickStart Guide
+
+**New to the API?** Start here! Our [QuickStart Guide](QUICKSTART_GUIDE.md) walks 
+
+The guide includes step-by-step instructions, example requests/responses, troubleshooting tips, and visual placeholders for screenshots.
+
 ## Postman Collection
 
 A complete Postman collection is available in the `postman/` directory for testing the API without writing code. The collection includes all endpoints organized into workflows matching the Python scripts.
