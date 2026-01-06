@@ -56,8 +56,6 @@ Don't worry—we've pre-configured everything in Postman so you can focus on tes
    - Select `GFW_Pro_EAPI.postman_collection.json`
    - Click **Import**
 
-   > 📸 *Screenshot placeholder: Postman Import screen showing the collection file selected*
-
 3. **Import the Environment:**
    - Click **Environments** in the left sidebar (or press `Cmd/Ctrl + E`)
    - Click **Import**
@@ -69,7 +67,7 @@ Don't worry—we've pre-configured everything in Postman so you can focus on tes
    - Click the environment dropdown (it may say "No Environment")
    - Select **"GFW Pro EAPI Environment"**
 
-   > 📸 *Screenshot placeholder: Environment dropdown showing "GFW Pro EAPI Environment" selected*
+![import postman collection](https://github.com/user-attachments/assets/6cf1647d-6d60-444f-8dd7-b599bfb5a886)
 
 ### 1.3 Configure Postman Settings
 
@@ -92,7 +90,8 @@ Don't worry—we've pre-configured everything in Postman so you can focus on tes
 
 > ⚠️ **If you skip this step, you may encounter errors when making API requests.** These settings ensure Postman behaves like command-line tools (curl) that our API expects.
 
-> 📸 *Screenshot placeholder: Postman Settings → General tab showing "Automatically follow redirects" ON and "HTTP version" set to "Auto"*
+![set_http_auto](https://github.com/user-attachments/assets/242a78cc-1dee-43ca-a395-fdfe4341c8db)
+
 
 ### 1.4 Get Your API Credentials
 
@@ -117,7 +116,7 @@ You should have received:
 
 4. Click **Save** (important!)
 
-   > 📸 *Screenshot placeholder: Environment variables screen showing the three required variables filled in*
+![set_enverioment](https://github.com/user-attachments/assets/5de2e08e-651a-49d4-8cc8-9f8ac51585ab)
 
 ---
 
@@ -153,7 +152,7 @@ This step gets a secure URL where you'll upload your location data.
 
 > ✅ **Success Indicator:** You see `uploadId` and `uploadUrl` in the response
 
-> 📸 *Screenshot placeholder: Postman showing successful Prepare Upload response with uploadId and uploadUrl highlighted*
+![upload](https://github.com/user-attachments/assets/f6ba88ba-1dcc-4ed5-b391-b6efe563031c)
 
 **What happened?** Postman automatically saved the `uploadId` and `uploadUrl` to your environment variables. You don't need to copy them—they'll be used automatically in the next step!
 
@@ -200,7 +199,7 @@ Farm B,5.834,-5.323,0.5,,My Company,Jane Smith
 
 > ✅ **Success Indicator:** Status code 200 with no error message
 
-> 📸 *Screenshot placeholder: Postman Body tab showing binary file selection with locations.csv selected*
+![upload-to-s3](https://github.com/user-attachments/assets/7ffe243f-d0b6-4b37-898c-1c73945ec1e3)
 
 **Understanding the Request:**
 - **Method:** PUT (used for uploading files)
@@ -238,7 +237,7 @@ This step registers your uploaded locations and requests forest analysis.
 
 > ✅ **Success Indicator:** You see a `listId` in the response
 
-> 📸 *Screenshot placeholder: Postman showing Create List request body with all fields visible, and successful response with listId*
+![create_list](https://github.com/user-attachments/assets/7fb0a6c6-582d-4bb0-b435-db8ff7507cea)
 
 **What happened?** The `listId` was automatically saved. Your analysis has started! This may take a few minutes depending on the number of locations.
 
@@ -269,12 +268,16 @@ Check if your analysis is complete.
 **Example Response (Still Processing):**
 ```json
 {
-  "status": "Running",
-  "listId": "12345",
-  "analysisType": "FCD",
-  "progress": 45
+    "listId": "2737",
+    "status": "Pending",
+    "errorsDetails": [],
+    "resultUrl": null,
+    "creationDate": null,
+    "expirationDate": null
 }
 ```
+
+![started-pooling](https://github.com/user-attachments/assets/d5e1ccd0-ae87-41dc-b4d7-91e2608497f6)
 
 **Example Response (Complete):**
 ```json
@@ -289,15 +292,14 @@ Check if your analysis is complete.
 ```
 
 **Status Values:**
-- `Pending` - Analysis hasn't started yet
-- `Running` - Analysis in progress (wait and check again)
+- `Pending` - Analysis in progress (wait and check again)
 - `Completed` - ✅ Analysis finished successfully!
 - `Error` - Something went wrong (see troubleshooting below)
-- `Expired` - Results are no longer available (need to regenerate)
 
 > ✅ **Success Indicator:** Status is `Completed` and you see a `resultUrl`
 
-> 📸 *Screenshot placeholder: Postman showing Poll Status response with "Completed" status and resultUrl highlighted*
+<img width="1444" height="897" alt="Captura de Tela 2026-01-06 às 20 23 29" src="https://github.com/user-attachments/assets/2b3febe0-bc65-4817-97d4-be0e5865fad1" />
+
 
 **If status is "Running":** Wait 30-60 seconds, then click **Send** again. Repeat until status is "Completed".
 
@@ -332,7 +334,7 @@ Get your analysis results!
 
 > ✅ **Success Indicator:** You successfully downloaded a ZIP file
 
-> 📸 *Screenshot placeholder: Postman showing Download Results with "Save Response" option visible*
+![save_download](https://github.com/user-attachments/assets/fd317b0e-9327-407d-8e27-4a13b218b9ec)
 
 **Congratulations! 🎉** You've successfully completed the full workflow!
 
@@ -366,17 +368,16 @@ Get your analysis results!
 **Status Response (Complete):**
 ```json
 {
-  "status": "Completed",
-  "listId": "12345",
-  "analysisType": "FCD",
-  "resultUrl": "https://s3.amazonaws.com/bucket/results.zip",
-  "creationDate": "2024-01-15T10:30:00Z",
-  "expirationDate": "2024-02-15T10:30:00Z"
+    "listId": "2737",
+    "status": "Completed",
+    "errorsDetails": [],
+    "resultUrl": "https://gfwpro-*******.s3.us-east-1.amazonaws.com/",
+    "creationDate": "2026-01-06T22:31:45.943Z",
+    "expirationDate": "2026-01-11T22:31:45.943Z"
 }
 ```
 - `status`: Current analysis status
 - `resultUrl`: URL to download your results (only when "Completed")
-- `analysisType`: Type of analysis performed (FCD, Alerts, GHG, etc.)
 - `expirationDate`: Download before this date!
 
 ### Common Error Responses
@@ -584,5 +585,5 @@ If you encounter issues not covered here:
 
 ---
 
-*Last updated: January 2025*
+*Last updated: January 2026*
 
