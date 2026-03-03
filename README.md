@@ -99,7 +99,7 @@ python flows/upload_and_list.py
 | `CSV_PATH` | Path to upload file | `sample_data/example.csv` |
 | `COMMODITY` | Commodity name (free form, required by API) | `Cocoa Generic` |
 | `ANALYSIS` | Analysis ID (`FCD`, `Alerts`, `DefReport`, `GHG`) | `FCD` |
-| `ALERT_START_DATE`, `ALERT_END_DATE` | Alerts date range (MM-DD-YYYY format) | `01-01-2024`, `12-31-2024` |
+| `ALERT_START_DATE`, `ALERT_END_DATE` | Alerts date range — accepts `YYYY-MM-DD` (recommended) or `MM-DD-YYYY` | `2024-01-01`, `2024-12-31` |
 | `GHG_YIELD` | Yield for GHG analysis (kg/ha) | `0.5` |
 | `LIST_ID`, `ANALYSIS_ID` | Used by `poll_analysis.py` | *(none)* |
 | `DELETE_LIST` | Set to `1` to delete the first list in `list_management.py` | `0` |

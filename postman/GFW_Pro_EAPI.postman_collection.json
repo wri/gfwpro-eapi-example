@@ -370,7 +370,7 @@
 							"host": ["{{baseUrl}}"],
 							"path": ["list", "{{listId}}", "analysis", "Alerts", "generate"]
 						},
-						"description": "Trigger alerts analysis for the specified date range"
+						"description": "Trigger alerts analysis for the specified date range. Dates accept YYYY-MM-DD (recommended) or MM-DD-YYYY format."
 					},
 					"response": []
 				},
@@ -763,13 +763,15 @@
 		},
 		{
 			"key": "alertStartDate",
-			"value": "01-01-2024",
-			"type": "string"
+			"value": "2024-01-01",
+			"type": "string",
+			"description": "YYYY-MM-DD (recommended) or MM-DD-YYYY"
 		},
 		{
 			"key": "alertEndDate",
-			"value": "12-31-2024",
-			"type": "string"
+			"value": "2024-12-31",
+			"type": "string",
+			"description": "YYYY-MM-DD (recommended) or MM-DD-YYYY"
 		},
 		{
 			"key": "ghgYield",

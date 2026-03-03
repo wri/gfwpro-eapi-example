@@ -13,8 +13,9 @@ BASE = os.environ.get('GFWPRO_BASE_URL', 'https://pro.globalforestwatch.org/api/
 TOKEN = os.environ.get('GFWPRO_API_TOKEN')
 EMAIL = os.environ.get('USER_EMAIL', 'demo@example.com')
 CSV_PATH = os.environ.get('CSV_PATH', 'sample_data/example.csv')
-START_DATE = os.environ.get('ALERT_START_DATE', '01-01-2024')
-END_DATE = os.environ.get('ALERT_END_DATE', '12-31-2024')
+# Date format: YYYY-MM-DD (recommended) or MM-DD-YYYY are both accepted
+START_DATE = os.environ.get('ALERT_START_DATE', '2024-01-01')
+END_DATE = os.environ.get('ALERT_END_DATE', '2024-12-31')
 HEADERS = {'x-api-key': TOKEN}
 
 
